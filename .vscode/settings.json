@@ -1,0 +1,8 @@
+{
+    "mos.port": "",
+    "mos.board": "ESP32",
+    "files.associations": {
+        "*.tag": "html",
+        "freemonobold9pt7b.h": "c"
+    }
+}
