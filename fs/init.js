@@ -3,6 +3,7 @@ load('api_rpc.js');
 load('api_dht.js');
 load('api_timer.js');
 load('api_gpio.js');
+load('api_adc.js');
 load('api_ili9341_spi.js');
 
 let getFont = ffi('void* get_font()');
@@ -37,17 +38,59 @@ GPIO.set_button_handler(33, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, lag, function(x) {
   }
 }, null);
 
-// Button Arraow UP
-GPIO.set_button_handler(34, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, lag, function(x) {
-  print('Button press, pin: ', x);
-  focus_parameter(-1);
+// X Y Buttons
+Timer.set(100, Timer.REPEAT, function() {
+  let x = ADC.read(34);
+  let y = ADC.read(35);
+
+  if(y > 3000){
+    focus_parameter(-1);
+  }
+  if(y > 1000 && y < 3000){
+    focus_parameter(1);
+  }
+
+  if(x > 3000){
+    change_parameter_value(-1);
+  }
+  if(x > 1000 && x < 3000){
+    change_parameter_value(1);
+  }
+
 }, null);
 
-// Button Arraow DOWN
-GPIO.set_button_handler(35, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, lag, function(x) {
-  print('Button press, pin: ', x);
-  focus_parameter(1);
-}, null);
+// Helper Function
+// Simple mjs solution to split string into an array
+function splitString(inTxt, sepChr) {
+  let pos = inTxt.indexOf(sepChr);
+  let out = [];
+  let part = '';
+  while (pos !== -1) {
+    part = inTxt.slice(0, pos);
+    if (part.length > 0) out.push(part);inTxt = inTxt.slice(pos+1, inTxt.length);
+		pos = inTxt.indexOf(sepChr);
+	}
+	out.push(inTxt);
+	return out;
+}
+
+// Replace Value
+function change_parameter_value(shift){
+  let sel = splitString(pages[pos[0]].pos[pos[1]].selection, ',');
+  let sel_len = sel.length;
+  let cur_val = pages[pos[0]].pos[pos[1]].value;
+  print(sel, sel_len);
+  for (let i = 0; i < sel_len; i++) {
+    if(cur_val === sel[i]){
+      print("pos:", i, shift, cur_val)
+      if (i > 0 && i < (sel_len -1)) {
+        let new_value = sel[i + shift];
+        list_parm(pos[1], new_value);
+        pages[pos[0]].pos[pos[1]].value = new_value;
+      }
+    }
+  }
+}
 
 
 /**
@@ -110,7 +153,6 @@ function focus_parameter(p){
   }
 }
 
-
 // Create Title
 function title(name, active, x,y,w,h){
   let x2 = x+w;
@@ -128,10 +170,12 @@ function title(name, active, x,y,w,h){
 
 // Crate Parameter List
 function list_parm(p, name, value){
+  //
   dis.setFgColor565(dis.WHITE); 
   dis.setFont(getFont());
   let p2 = 30*p + offset; 
   dis.print(10,p2,name);
+  dis.setFgColor565(dis.WHITE); 
   dis.print(200,p2,value);
   // line
   dis.setFgColor565(dis.DARKGREY); 
@@ -153,8 +197,16 @@ function init_gui (){
 
   // Activ parm
   focus_parameter(0);
-
 }
 
+function init_adc (){
+  // Activate Pin 34 / 35 for ADC Read
+  let pin = 34;
+  ADC.enable(pin);
+  let pin = 35;
+  ADC.enable(pin);
+}
+
+init_adc();
 parseData();
 init_gui();

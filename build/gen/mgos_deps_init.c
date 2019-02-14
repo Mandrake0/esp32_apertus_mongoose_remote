@@ -13,6 +13,7 @@ extern bool mgos_vfs_common_init(void);
 extern bool mgos_vfs_fs_lfs_init(void);
 extern bool mgos_vfs_fs_spiffs_init(void);
 extern bool mgos_core_init(void);
+extern bool mgos_adc_init(void);
 extern bool mgos_i2c_init(void);
 extern bool mgos_atca_init(void);
 extern bool mgos_dht_init(void);
@@ -45,6 +46,9 @@ static const struct lib_descr {
 
     // "core". deps: [ "mongoose" "vfs-common" "vfs-fs-lfs" "vfs-fs-spiffs" ]
     {.title = "core", .init = mgos_core_init},
+
+    // "adc". deps: [ "core" ]
+    {.title = "adc", .init = mgos_adc_init},
 
     // "i2c". deps: [ "core" ]
     {.title = "i2c", .init = mgos_i2c_init},

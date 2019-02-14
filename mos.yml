@@ -56,6 +56,7 @@ libs:
   - origin: https://github.com/mongoose-os-libs/dht  # <-- Add this line!
   - origin: https://github.com/mongoose-os-libs/mjs  # <-- Add this line!
   - origin: https://github.com/mongoose-os-libs/ili9341-spi  # <-- Display Driver
+  - origin: https://github.com/mongoose-os-libs/adc  # <-- ADC
 
 
 # Used by the mos tool to catch mos binaries incompatible with this file format

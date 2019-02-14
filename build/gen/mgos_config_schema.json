@@ -21,6 +21,8 @@
   ["sys.tz_spec", "s", {"title": "See formats for the TZ env var: \"man tzset\". Formats like \":/path/to/file\" are not supported"}],
   ["sys.wdt_timeout", "i", {"title": "Watchdog timeout (seconds)"}],
   ["sys.pref_ota_lib", "s", {"title": "Preferred ota lib, e.g. dash, ota-http-client"}],
+  ["sys.esp32_adc_vref", "i", {"title": "ADC Vref, in mV"}],
+  ["sys.esp32_adc_width", "i", {"title": "ADC width, see ESP32 IDF"}],
   ["sys.atca", "o", {"title": "CryptoAuthLib configuration"}],
   ["sys.atca.enable", "b", {"title": "Enable the chip"}],
   ["sys.atca.i2c_bus", "i", {"title": "Which I2C bus to use"}],

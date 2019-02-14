@@ -1,0 +1,19 @@
+// Reboot
+mos call Sys.Reboot
+
+// upload file
+mos put init.js
+
+// build
+mos build --arch esp32
+
+// Flash
+mos flash
+
+// Get Config Data
+
+mos config-get spi
+mos config-get spi
+
+// Set Config Data
+mos config-set spi.enable=true
